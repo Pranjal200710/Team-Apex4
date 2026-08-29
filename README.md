@@ -1,55 +1,50 @@
-# MediCare Patient Portal — GitHub Codespaces
+# MediCare conversational healthcare assistant (prototype)
 
-This version unifies the **Current Diagnosis / Medical History** page with the visual design used by the supplied **Payments** page.
+This is a safe, fully mock FastAPI demo. It contains no real patient information, payment connection, hospital system, or production authentication.
 
-## Required files
+## What it demonstrates
 
-Keep these files together in the repository root:
-
-- `server.js` — Node.js server and redesigned Current Diagnosis page
-- `package.json` — start configuration
-- `indexf.html` — existing Payments page
-- `styles.css` — existing Payments styles
-- `app.js` — existing Payments interactions
+- Backend age check: `P001` (John Doe, age 67) automatically opens the assistant after login.
+- Rule-based intent detection; no API key or external LLM is used.
+- Every chatbot request passes through `SecurityGateway`; the chatbot never calls the data layer.
+- Deterministic risk engine and configurable policy: `HIGH` / `CRITICAL` actions need caregiver approval.
+- Caregiver dashboard uses lightweight 3-second polling.
+- Mock record deletion and mock payment only happen **after approval**.
+- Append-only, in-memory audit records exposed at `/api/audit`.
 
 ## Run in GitHub Codespaces
 
-Open **Terminal → New Terminal** and run:
+From the project folder:
 
 ```bash
-npm start
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Then open the **Ports** tab and open port **3000**.
+Forward port **8000**, then open these URLs:
 
-## Routes
+- `https://<your-forwarded-url>/patient/` — patient chatbot
+- `https://<your-forwarded-url>/caregiver/` — caregiver approval console
+- `https://<your-forwarded-url>/docs` — interactive REST API documentation
 
-- `/` — Current Diagnosis / Medical History
-- `/current-diagnosis` — Current Diagnosis / Medical History
-- `/payments` — Payments page using `indexf.html`, `styles.css`, and `app.js`
-- `/health` — JSON server health check
+## Demo credentials and flow
 
-## What was changed
+- Patient: `P001` — John Doe (67), caregiver: `C001`
+- Caregiver console: C001 is already selected in this mock UI.
 
-The Medical History page now uses the same UI language as the Payments page:
+In the patient page, try:
 
-- dark green fixed sidebar
-- MediCare branding
-- DM Sans body typography
-- Playfair Display headings
-- mint / yellow / lavender status cards
-- matching table, filters, buttons, spacing and responsive behavior
+```text
+I want to delete my MRI report.
+Pay ₹2500 for my consultation.
+Show my prescription.
+Show my payment history.
+```
 
-The original Medical History demo functionality is preserved:
+Open the caregiver page in another tab, approve or deny the pending request, then refresh/use the endpoints to see the outcome. `DELETE_REPORT` removes the mock report only after approval; a payment is added to mock payment history only after approval.
 
-- protected diagnosis and prescription fields
-- access request flow
-- approve / deny demo controls
-- automatic 5-minute expiry
-- visit filtering and search
-- expandable consultation details
-- prescriptions
-- investigations
-- latest vitals
-- access audit trail
-- Care Assistant widget
+## Integration points
+
+Your existing payments dashboard can call `GET /api/patient/P001/payments`. To submit a payment authorization, call `POST /api/payment/request` with `patient_id`, `action: "MAKE_PAYMENT"`, `amount`, and `purpose`. The caregiver dashboard uses `GET /api/security/requests/{caregiver_id}` and the approve/deny endpoints. In a real system, replace mock login, in-memory data and polling with authenticated backend services, a protected database, and WebSockets.
