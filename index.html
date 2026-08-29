@@ -1,1 +1,39 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MediCare Assistant</title><link rel="stylesheet" href="style.css"></head><body><main><section class="hero"><a class="brand" href="#">✚ Medi<span>Care</span></a><p class="tag">PATIENT SUPPORT</p><h1>Your healthcare assistant</h1><p>Private, simple support for your care. Sensitive requests are always checked by the security gateway.</p></section><section class="chat-card"><div class="patient-bar"><span class="avatar">JD</span><div><strong id="patientName">John Doe</strong><small id="patientInfo">Loading patient profile…</small></div><span id="shield">⛨ Secure gateway</span></div><div id="chat" class="chat" aria-live="polite"></div><div class="suggestions"><button>View my reports</button><button>Show my prescription</button><button>Book an appointment</button><button>Show my payment history</button><button>Pay ₹2500 for my consultation</button></div><form id="chatForm"><input id="message" aria-label="Chat message" placeholder="Ask about your healthcare…" autocomplete="off"><button>Send <span>↑</span></button></form><p class="note">Demo only · mock patient data · no real medical or payment records</p></section></main><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital AI Security Gateway - Doctor Management</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<header class="header"><div class="logo"><span class="logo-mark">✚</span>Hospital AI Security Gateway</div><div class="header-title">Doctor Management</div><div class="admin">AD</div></header>
+<main class="container">
+<section id="listPage">
+<div class="page-title"><h1>Doctor Management</h1><p>Manage current, past and emergency doctors</p></div>
+<label class="search-label">🔍 Search doctor / specialization / department / contact</label>
+<input id="searchInput" class="search-box" placeholder="Search...">
+<div class="category-container">
+<div id="currentCard" class="category current selected" onclick="selectCategory('current')"><div class="category-title">🟢 CURRENT AVAILABLE</div><div id="currentCount" class="category-number">00</div></div>
+<div id="pastCard" class="category past" onclick="selectCategory('past')"><div class="category-title">🟡 PAST DOCTORS</div><div id="pastCount" class="category-number">00</div></div>
+<div id="sosCard" class="category sos" onclick="selectCategory('sos')"><div class="category-title">🔴 SOS DOCTORS</div><div id="sosCount" class="category-number">00</div></div>
+</div>
+<div class="doctor-section"><div class="section-header"><h2 id="tableTitle">Current Available Doctors</h2><span id="doctorCount" class="doctor-count"></span></div>
+<div class="table-container"><table><thead><tr><th>Doctor</th><th>Specialization</th><th>Department</th><th>Contact</th><th>Status</th><th>Login Time</th><th>Action</th></tr></thead><tbody id="doctorTable"></tbody></table></div></div>
+</section>
+<section id="detailsPage" class="details-page">
+<button class="back-button" onclick="goBack()">← Back to Doctors</button>
+<div id="sosWarning" class="sos-warning">🚨 <strong>SOS DOCTOR</strong> — This doctor is currently marked for emergency response.</div>
+<div class="profile-header"><div class="doctor-icon">👨‍⚕️</div><div class="profile-info"><h2 id="detailName"></h2><p id="detailSpecialization"></p><span id="detailStatus" class="status"></span></div></div>
+<div class="details-grid">
+<div class="details-card"><h3>Doctor Information</h3><div class="detail-row"><span class="detail-label">Doctor Name</span><span id="detailName2">-</span></div><div class="detail-row"><span class="detail-label">Specialization</span><span id="detailSpec">-</span></div><div class="detail-row"><span class="detail-label">Department</span><span id="detailDepartment">-</span></div><div class="detail-row"><span class="detail-label">Doctor ID</span><span id="detailID">-</span></div></div>
+<div class="details-card"><h3>Contact Information</h3><div class="detail-row"><span class="detail-label">Contact Number</span><span id="detailPhone">-</span></div><div class="detail-row"><span class="detail-label">Email</span><span id="detailEmail">-</span></div><a id="contactButton" class="contact-button">📞 Contact Doctor</a></div>
+<div class="details-card"><h3>Availability</h3><div class="detail-row"><span class="detail-label">Current Status</span><span id="detailAvailability">-</span></div><div class="detail-row"><span class="detail-label">Login Time</span><span id="detailLogin">-</span></div><div class="detail-row"><span class="detail-label">Available Until</span><span id="detailLogout">-</span></div></div>
+<div class="details-card"><h3>Activity</h3><div class="detail-row"><span class="detail-label">Last Login</span><span id="detailLastLogin">-</span></div><div class="detail-row"><span class="detail-label">Last Active</span><span id="detailLastActive">-</span></div><div class="detail-row"><span class="detail-label">Emergency</span><span id="detailEmergency">-</span></div></div>
+</div>
+<div class="doctor-section"><div class="section-header"><h2>Login / Activity History</h2></div><div class="table-container"><table><thead><tr><th>Date</th><th>Login</th><th>Logout</th><th>Status</th></tr></thead><tbody id="historyTable"></tbody></table></div></div>
+</section>
+</main>
+</body>
+</html>
